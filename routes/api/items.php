@@ -5,6 +5,7 @@ use App\Http\Controllers\ItemController;
 
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/users/{user}/items/', [ItemController::class, 'user_items']);
     Route::post('items', [ItemController::class, 'store']);
     Route::put('items/{item}', [ItemController::class, 'update']);
     Route::delete('items/{item}', [ItemController::class, 'destroy']);

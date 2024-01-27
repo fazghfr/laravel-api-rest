@@ -3,11 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
 class ItemController extends Controller
 {
+
+    private function isAuthorized(Item $item)
+    {
+        //user attempt pasti gak null, karena ada middleware.
+        // -> check
+        $user_attempt = auth('sanctum')->user()->email;
+        $user_authorized = User::find($item->user_id)->email;
+
+        if($user_attempt == $user_authorized)
+        {
+            return true;
+        }
+
+        return false;
+    }
     /**
      * Display a listing of the resource.
      */
@@ -35,7 +52,8 @@ class ItemController extends Controller
         $newItem = Item::create([
             'item_name' => $request->item_name,
             'item_price' => $request->item_price,
-            'item_qty' => $request->item_qty
+            'item_qty' => $request->item_qty,
+            'user_id'  => Auth::user()->id
         ]);
 
         return new JsonResponse([
@@ -44,11 +62,30 @@ class ItemController extends Controller
         ], 200);
     }
 
+    /*
+        Display items by user id
+    */
+    public function user_items(User $user)
+    {
+        $items = Item::where('user_id', $user->id)->get();
+
+        return new JsonResponse([
+            'data' => $items,
+            'message' => 'success'
+        ]);
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(Item $item)
     {
+        if(!$this->isAuthorized($item))
+        {
+            return  new JsonResponse([
+                'message' => 'unauthorized'
+            ], 401);
+        }
         return  new JsonResponse([
             'data' => $item
         ]);
@@ -59,6 +96,13 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
+
+        if(!$this->isAuthorized($item))
+        {
+            return  new JsonResponse([
+                'message' => 'unauthorized'
+            ], 401);
+        }
         // note
         // sebenernya ini gaperlu secara fungsionalitas
         // tapi biar clear kalau requestnya gak sesuai, user ke notify
@@ -87,6 +131,13 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        if(!$this->isAuthorized($item))
+        {
+            return  new JsonResponse([
+                'message' => 'unauthorized'
+            ], 401);
+        }
+
         $item->delete();
 
         return new JsonResponse([
