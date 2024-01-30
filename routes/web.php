@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\pageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+
+
+Route::get('/home', [pageController::class, 'home_page']);
+
+//login and register routes
+Route::get('/login', [pageController::class, 'login_page']);
+Route::get('/logout', [pageController::class, 'log_out']); //buat sementara
+Route::post('/login', [pageController::class, 'login']);
+

@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Route;
 */
 require __DIR__ . '/api/items.php';
 require __DIR__ . '/api/auth.php';
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// routes/api.php
+Route::get('/test-api', function () {
+    return response()->json(['message' => 'API response']);
 });
+

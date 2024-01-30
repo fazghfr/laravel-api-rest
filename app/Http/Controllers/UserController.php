@@ -9,6 +9,14 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    // get the user by token
+    public function getUser(Request $request)
+    {
+        return response()->json([
+            'user' => $request->user()
+        ]);
+    }
+
     // register and logging in
     public function register(Request $request)
     {
@@ -71,7 +79,7 @@ class UserController extends Controller
     public function logout(Request $request)
     {
         // Ensure the user is authenticated
-        $user = Auth::user();
+        $user = $request->user();
 
         if ($user) {
             // Revoke all of the user's tokens
