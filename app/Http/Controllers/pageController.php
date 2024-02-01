@@ -63,11 +63,15 @@ class pageController extends Controller
         }
         session(['auth_token' => $dataResponse->token]);
 
-        return redirect('/home');
+        return redirect('/');
     }
 
     public function log_out()
     {
+        if(!session('auth_token')){
+            return redirect('/');
+        }
+
         // call api logout and handle using app()->handle
         $apiReq = RequestFacade::create(self::web_prefix . 'logout', 'POST');
         $apiReq->headers->set('Authorization', 'Bearer '.session('auth_token'));
@@ -76,19 +80,44 @@ class pageController extends Controller
 
         if($apiResponse->getStatusCode() != 200){
             // TODO : send error message
-            dd('masuk');
-            return redirect('/home');
+            dd($apiResponse);
+            return redirect('/');
         }
 
         session()->forget('auth_token');
 
-        return redirect('/home');
+        return redirect('/');
     }
 
     public function home_page()
     {
         $homeData = $this->get_authenticated_user();
-;
+
         return view('home', compact('homeData'));
+    }
+
+    public function register_page()
+    {
+        return view('register');
+    }
+
+    public function register(RequestHTTP $request)
+    {
+        // call api register and handle using app()->handle
+        $apiReq = RequestFacade::create(self::web_prefix . 'register', 'POST', [
+            'name' => $request->all()['name'],
+            'email' => $request->all()['email'],
+            'password' => $request->all()['password'],
+            'password_confirmation' => $request->all()['password_confirmation'],
+        ]);
+
+        $apiResponse = app()->handle($apiReq);
+
+        if($apiResponse->getStatusCode() != 200){
+            // TODO : send error message
+            return redirect('/register');
+        }
+
+        return redirect('/login');
     }
 }

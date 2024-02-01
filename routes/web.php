@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 
 
-Route::get('/home', [pageController::class, 'home_page']);
+Route::get('/', [pageController::class, 'home_page']);
 
 //login and register routes
 Route::get('/login', [pageController::class, 'login_page']);
+Route::get('/register', [pageController::class, 'register_page']);
+Route::post('/register', [pageController::class, 'register']);
 Route::get('/logout', [pageController::class, 'log_out']); //buat sementara
 Route::post('/login', [pageController::class, 'login']);
 

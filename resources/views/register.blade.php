@@ -1,12 +1,12 @@
 @extends('layout.layout')
 
 @section('content')
-    <div class="container d-flex justify-content-center p-5 bg-white" 
+    <div class="container d-flex justify-content-center p-5 bg-white"
         style="margin-top: 4rem; width:60%; border-radius: 25px; box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;">
 
         <div class="form-frame" style="width: 60%;">
             <h1 class="text-center">Register</h1>
-            <form method="POST" action="#">
+            <form method="POST" action="/register">
                 @csrf
 
                 <div class="form-group">
@@ -25,11 +25,10 @@
                 </div>
 
                 <div class="form-group">
-                    <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="remember" name="remember">
-                        <label class="form-check-label" for="remember">Remember Me</label>
-                    </div>
+                    <label for="password_confirmation">Confirm Password</label>
+                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" required>
                 </div>
+
 
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">Register</button>

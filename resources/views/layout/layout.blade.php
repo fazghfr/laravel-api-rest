@@ -42,6 +42,10 @@
                         <li class="nav-item">
                             <span class="nav-link text-white"> Hello, {{ $homeData['name'] }}!</span>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="/logout">Logout</a>
+                        </li>
                         {{-- Add other links for authenticated users if needed --}}
                     </ul>
                 @else
